@@ -12,7 +12,7 @@ TweetBar is a social networking platform where users can share their thoughts, u
 
 ## 🛠️ Tech Stack
 - **Backend:** Python 3.x, Django 5.x
-- **Frontend:** HTML5, CSS3, Tailwind CSS (or Bootstrap)
+- **Frontend:** HTML5, CSS3, Tailwind CSS
 - **Database:** SQLite (Default) / PostgreSQL 
 - **Environment:** Python Virtual Environments (`venv`)
 
@@ -76,5 +76,6 @@ media/: User-uploaded images.
 
 🎓 Learning Credits
 This project was built as part of my learning journey in Python-Django, inspired by the Chai aur Code series. It helped me master the Django Request-Response cycle, Template Inheritance, and Backend logic.
+
 
 Developed by BHANUPRAKASH T
