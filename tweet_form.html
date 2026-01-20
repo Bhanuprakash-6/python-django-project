@@ -1,0 +1,34 @@
+{% include 'layout.html' %}
+
+{% block title %}
+    <h3 class="text-4xl text-center font-bold text-white mt-6">Create / Edit Tweet</h3>
+{% endblock %}
+
+{% block content %}
+<div class="flex justify-center mt-10">
+    <div class="w-full max-w-lg bg-amber-200 shadow-lg p-8">
+        <h2 class="text-2xl font-semibold text-center text-black mb-6">Tweet Form</h2>
+        
+        <form method="post" enctype="multipart/form-data" class="space-y-5">
+            {% csrf_token %}
+            
+            <!-- Render form fields -->
+            <div class="space-y-4 text-black">
+                {{ form.as_p }}
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-between mt-6">
+                <button type="submit" 
+                        class="px-6 py-2 bg-green-500 hover:bg-green-600 text-black font-semibold rounded-lg shadow-md transition duration-300">
+                    💾 Save
+                </button>
+                <a href="{% url 'tweet_list' %}" 
+                   class="px-6 py-2 bg-gray-400 hover:bg-gray-500 text-black font-semibold rounded-lg shadow-md transition duration-300">
+                    ❌ Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

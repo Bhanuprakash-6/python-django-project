@@ -1,0 +1,172 @@
+{% include 'layout.html' %}
+
+{% block title %}
+    <h3 class="text-4xl text-center font-bold text-white mt-6">Tweet Feed</h3>
+{% endblock %}
+
+{% block content %}
+
+    <div class="flex justify-center mb-10">
+        <a class="flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#1DA1F2] hover:bg-[#1a91da] text-white font-bold shadow-md transition-all active:scale-95"
+           href="{% url 'tweet_create' %}">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M23 3l-6.5 2-2 6.5L11 8l-4 4-2-1 1-2 4-4 3.5 1.5L21 1l2 2z"></path></svg>
+            Post something
+        </a>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-4 mb-12">
+        <div class="relative rounded-3xl overflow-hidden shadow-xl border border-gray-100 bg-white">
+            <div id="tweetCarousel" class="flex transition-transform duration-700 cubic-bezier(0.4, 0, 0.2, 1)">
+                {% for tweet in tweets|slice:":6" %}
+                    <div class="min-w-full flex-shrink-0 p-8 md:flex gap-6 items-center bg-white">
+                        {% if tweet.photo %}
+                            <div class="w-full md:w-1/2 h-64 overflow-hidden rounded-2xl border border-gray-100">
+                                <img class="w-full h-full object-cover" src="{{ tweet.photo.url }}" alt="Featured" />
+                            </div>
+                        {% endif %}
+                        <div class="mt-4 md:mt-0 flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-600">
+                                    {{ tweet.user.username|slice:":1"|upper }}
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-900 leading-tight">@{{ tweet.user.username }}</p>
+                                    <p class="text-xs text-gray-500">Featured Post</p>
+                                </div>
+                            </div>
+                            <p class="text-xl text-gray-800 leading-relaxed font-medium line-clamp-3">
+                                {{ tweet.text }}
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div class="absolute bottom-4 right-8 flex space-x-2">
+                {% for tweet in tweets|slice:":6" %}
+                    <span class="dot w-1.5 h-1.5 rounded-full bg-gray-300 cursor-pointer transition-all"></span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 pb-20">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for tweet in tweets %}
+                <div class="bg-white border border-gray-200 rounded-2xl hover:border-blue-300 hover:shadow-md transition-all duration-300 flex flex-col h-full overflow-hidden">
+                    
+                    <div class="p-4 flex items-start justify-between">
+                        <div class="flex gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gray-200 border border-gray-100 flex-shrink-0 flex items-center justify-center font-bold text-gray-600">
+                                {{ tweet.user.username|slice:":1"|upper }}
+                            </div>
+                            <div>
+                                <h5 class="text-[15px] font-bold text-gray-900 leading-none mb-1">@{{ tweet.user.username }}</h5>
+                                <p class="text-[13px] text-gray-500">Just now</p>
+                            </div>
+                        </div>
+                        
+                        {% if tweet.user == user %}
+                        <div class="relative">
+                            <button onclick="toggleMenu({{ tweet.id }})" class="text-gray-400 hover:text-blue-500 p-1 rounded-full hover:bg-blue-50 transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 10.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM19.5 10.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM4.5 10.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z"></path></svg>
+                            </button>
+                            <div id="menu-{{ tweet.id }}" class="hidden absolute right-0 mt-2 w-32 bg-white border border-gray-100 rounded-xl shadow-xl z-20 overflow-hidden">
+                                <a href="{% url 'tweet_edit' tweet.id %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Edit</a>
+                                <a href="{% url 'tweet_delete' tweet.id %}" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">Delete</a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="px-4 pb-3 flex-grow">
+                        <p class="text-[15px] text-gray-800 leading-normal whitespace-pre-wrap">{{ tweet.text }}</p>
+                    </div>
+
+                    {% if tweet.photo %}
+                    <div class="px-4 pb-4">
+                        <div class="rounded-2xl overflow-hidden border border-gray-100 aspect-video sm:aspect-square">
+                            <img class="w-full h-full object-cover transition-transform hover:scale-105 duration-500" 
+                                 src="{{ tweet.photo.url }}" alt="Post media" />
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="px-4 py-3 border-t border-gray-50 flex justify-between text-gray-500">
+                        <div class="flex items-center gap-1 hover:text-blue-500 cursor-pointer transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                            <span class="text-xs">12</span>
+                        </div>
+                        <div class="flex items-center gap-1 hover:text-green-500 cursor-pointer transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            <span class="text-xs">5</span>
+                        </div>
+                        <div class="flex items-center gap-1 hover:text-red-500 cursor-pointer transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                            <span class="text-xs">42</span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Carousel + Menu Script -->
+    <script>
+        const carousel = document.getElementById('tweetCarousel');
+        const slides = carousel.children.length;
+        const dots = document.querySelectorAll('.dot');
+        let index = 0;
+
+        function updateCarousel() {
+            carousel.style.transform = `translateX(-${index * 100}%)`;
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.add('bg-blue-500', 'w-5', 'h-5');
+                    dot.classList.remove('bg-gray-400', 'w-3', 'h-3');
+                } else {
+                    dot.classList.add('bg-gray-400', 'w-3', 'h-3');
+                    dot.classList.remove('bg-blue-500', 'w-5', 'h-5');
+                }
+            });
+        }
+
+        // Auto slide every 3 seconds
+        setInterval(() => {
+            index = (index + 1) % slides;
+            updateCarousel();
+        }, 3000);
+
+        // Clickable dots
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => {
+                index = i;
+                updateCarousel();
+            });
+        });
+
+        // Initialize
+        updateCarousel();
+
+        // Dropdown menu toggle
+        function toggleMenu(id) {
+            const menu = document.getElementById(`menu-${id}`);
+            // Close all other menus
+            document.querySelectorAll('[id^="menu-"]').forEach(m => {
+                if (m !== menu) m.classList.add('hidden');
+            });
+            // Toggle current menu
+            menu.classList.toggle('hidden');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menus = document.querySelectorAll('[id^="menu-"]');
+            menus.forEach(menu => {
+                if (!menu.contains(event.target) && !menu.previousElementSibling.contains(event.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+{% endblock %}

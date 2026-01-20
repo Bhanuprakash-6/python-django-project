@@ -1,0 +1,25 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Database (Keep your local data local)
+db.sqlite3
+
+# Media files (Don't upload user-uploaded images)
+media/
+
+# Static files (Don't upload collected static)
+staticfiles/
+
+# Environment variables
+.env
+
+# OS generated files
+.DS_Store
+Thumbs.db
