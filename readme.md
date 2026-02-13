@@ -63,7 +63,7 @@ python manage.py createsuperuser
 Bash
 
 python manage.py runserver
-Access the app at http://127.0.0.1:8000/
+Access the app at ..........
 
 📂 Project Structure
 tweet/: The main application logic (Models, Views, Forms).
@@ -79,3 +79,4 @@ This project was built as part of my learning journey in Python-Django, inspired
 
 
 Developed by BHANUPRAKASH T
+
